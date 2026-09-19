@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>META BANK CITY - F4F</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e2f;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:'Inter',sans-serif}
+.phone{width:390px;max-width:100vw;min-height:850px;background:linear-gradient(180deg,#121a4a 0%,#0f1950 15%,#162168 40%,#1a237e 100%);position:relative;overflow:hidden;border-radius:38px}
+.city-bg{position:absolute;bottom:0;left:0;right:0;height:420px;background:url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=800') center bottom/cover no-repeat;opacity:0.5;pointer-events:none}
+.stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 80% 40%,#fff,transparent);opacity:0.7;pointer-events:none}
+.screen{display:none;flex-direction:column;padding:0 24px 30px;position:relative;z-index:2;min-height:780px}
+.screen.active{display:flex}
+.top-nav{display:flex;align-items:center;justify-content:center;position:relative;padding:18px 0 10px}
+.back-btn{position:absolute;left:0;background:none;border:none;color:#e9d28b;font-size:26px;cursor:pointer}
+.top-nav h2{font-family:'Cinzel',serif;color:#e9d28b;font-size:18px}
+.bank-text{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:#fde68a;text-align:center;margin-top:12px}
+.subtitle{color:#8aa2ff;font-size:12px;text-align:center;margin-top:6px}
+.badge{margin:14px auto 0;background:linear-gradient(180deg,#fde68a 0%,#d4af37 100%);border-radius:22px;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.input-group{position:relative;margin-top:16px;width:100%}
+.input-group label{position:absolute;top:-8px;left:18px;background:#1a237e;padding:0 6px;font-size:10px;font-weight:700;color:#fde68a;z-index:1}
+.input-field{width:100%;background:rgba(20,30,120,0.6);border:1.5px solid #fde68a;border-radius:14px;padding:16px 46px 14px 48px;color:white;font-size:13px;outline:none}
+.input-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%)}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:#fde68a}
+.btn-gold{margin-top:22px;width:100%;background:linear-gradient(180deg,#ffed9a,#fde68a 20%,#d4af37 70%,#b8932a 100%);border:none;border-radius:16px;padding:18px;font-size:17px;font-weight:800;color:#1a1450;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-outline{margin-top:14px;width:100%;background:rgba(20,30,100,0.5);border:1.5px solid #fde68a;border-radius:16px;padding:17px;font-size:17px;font-weight:800;color:#fde68a;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.link{color:#fde68a;text-decoration:underline;cursor:pointer;font-weight:600}
+.footer-sec{margin-top:auto;padding-top:22px;text-align:center;font-size:10px;color:#8aa2ff}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#0f1950;border:1.5px solid #fde68a;color:white;padding:12px 18px;border-radius:12px;font-size:12px;z-index:100;display:none;max-width:90%;text-align:center}
+.otp-box{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.otp-box input{width:44px;height:52px;text-align:center;font-size:20px;font-weight:700;background:rgba(20,30,120,0.6);border:1.5px solid #fde68a;border-radius:10px;color:white;outline:none}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="stars"></div><div class="city-bg"></div>
+
+<div class="screen active" id="screen-home">
+<div style="text-align:center;margin-top:30px"><div style="font-size:80px">🏛️</div><div class="bank-text">META BANK CITY</div><div class="subtitle">Banque sécurisée • Votre partenaire de confiance depuis 1995</div></div>
+<div style="margin:30px auto 0;background:linear-gradient(180deg,#2a2f7a 0%,#1a1f5a 100%);border:1.5px solid #fde68a;border-radius:18px;padding:12px 18px;display:flex;gap:10px"><span>🎁</span><div style="color:white;font-size:13px">Recevez 100 Meta Crédit<br>après l'inscription <b style="color:#fde68a">GRATUITEMENT ✨</b></div></div>
+<div style="margin-top:auto"><button class="btn-gold" onclick="showScreen('login')">🔒 SE CONNECTER</button><button class="btn-outline" onclick="showScreen('register')">✨ INSCRIPTION</button><div class="footer-sec">🛡️ Sécurisé • F4F Double Vérification activée</div></div>
+</div>
+
+<div class="screen" id="screen-login">
+<div class="top-nav"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>SE CONNECTER</h2></div>
+<div style="text-align:center"><div style="font-size:68px">🏛️</div><div style="font-family:'Cinzel',serif;color:#fde68a;font-size:24px;font-weight:700">Bon retour !</div></div>
+<div class="input-group" style="margin-top:28px"><label>EMAIL</label><span class="input-icon">✉️</span><input class="input-field" id="login-email" placeholder="exemple@email.com"></div>
+<div class="input-group"><label>MOT DE PASSE</label><span class="input-icon">🔒</span><input class="input-field" type="password" id="login-pwd" placeholder="••••••••••"><span class="eye" onclick="togglePwd('login-pwd')">👁️</span></div>
+<button class="btn-gold" id="btn-login" onclick="handleLogin()">🛡️ SE CONNECTER</button>
+<div style="text-align:center;margin-top:18px;font-size:13px;color:#c5d0ff">Pas de compte ?<br><span class="link" onclick="showScreen('register')">Créer un compte</span></div>
+</div>
+
+<div class="screen" id="screen-register">
+<div class="top-nav"><button class="back-btn" onclick="showScreen('home')">‹</button><h2>INSCRIPTION</h2></div>
+<div class="badge"><span>🛡️</span><div style="color:#1a1450;font-size:12px;font-weight:700">F4F Double Vérification<br><span style="font-size:10px;font-weight:500">Sécurité renforcée en 2 étapes</span></div></div>
+<div style="text-align:center;margin-top:12px"><div style="font-size:58px">🏛️</div><div style="font-family:'Cinzel',serif;color:#fde68a;font-size:20px">Créez votre compte</div></div>
+<div class="input-group" style="margin-top:20px"><label>NOM</label><span class="input-icon">👤</span><input class="input-field" id="reg-name" placeholder="Votre nom complet"></div>
+<div class="input-group"><label>EMAIL</label><span class="input-icon">✉️</span><input class="input-field" id="reg-email" placeholder="exemple@email.com"></div>
+<div class="input-group"><label>MOT DE PASSE</label><span class="input-icon">🔒</span><input class="input-field" type="password" id="reg-pwd" placeholder="••••••••••"><span class="eye" onclick="togglePwd('reg-pwd')">👁️</span></div>
+<button class="btn-gold" id="btn-reg" onclick="handleRegister()">🛡️ CRÉER MON COMPTE</button>
+<div style="text-align:center;margin-top:14px;font-size:13px;color:#c5d0ff">Déjà un compte ? <span class="link" onclick="showScreen('login')">Se connecter</span></div>
+</div>
+
+<div class="screen" id="screen-verify">
+<div class="top-nav"><button class="back-btn" onclick="showScreen('register')">‹</button><h2>VÉRIFICATION F4F</h2></div>
+<div style="text-align:center;margin-top:20px"><div style="font-size:60px">📧</div><div style="font-family:'Cinzel',serif;color:#fde68a;font-size:20px;font-weight:700">Vérifiez votre email</div><div class="subtitle">Code envoyé à <b id="verify-email" style="color:#fde68a"></b><br>Supabase confirme seul</div></div>
+<div class="otp-box"><input maxlength="1" id="otp1"><input maxlength="1" id="otp2"><input maxlength="1" id="otp3"><input maxlength="1" id="otp4"><input maxlength="1" id="otp5"><input maxlength="1" id="otp6"></div>
+<button class="btn-gold" onclick="verifyOTP()">✅ CONFIRMER F4F</button>
+<button class="btn-outline" style="font-size:13px;padding:12px" onclick="resendOTP()">↻ Renvoyer le code</button>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = "https://divnattkkvhxkjimrurpt.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_26CuqGW4wcaEqkuYBZ_yvw_k3yv-mxz";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function toast(msg, ok=true){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; t.style.borderColor= ok ? '#fde68a' : '#ff4444'; setTimeout(()=>t.style.display='none',4000); }
+function showScreen(n){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+n).classList.add('active'); }
+function togglePwd(id){ const e=document.getElementById(id); e.type=e.type==='password'?'text':'password'; }
+let pendingEmail="";
+async function handleRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pwd=document.getElementById('reg-pwd').value.trim();
+  if(!name||!email||!pwd){ toast('Remplis tout', false); return; }
+  const btn=document.getElementById('btn-reg'); btn.disabled=true; btn.textContent='⏳ Envoi...';
+  const { data, error } = await supabase.auth.signUp({ email:email, password:pwd, options:{ data:{full_name:name, f4f_enabled:true}}});
+  if(error){ toast(error.message,false); btn.disabled=false; btn.innerHTML='🛡️ CRÉER MON COMPTE'; return; }
+  pendingEmail=email; document.getElementById('verify-email').textContent=email;
+  toast('✅ Email envoyé ! Check ta boite'); showScreen('verify'); btn.disabled=false; btn.innerHTML='🛡️ CRÉER MON COMPTE';
+}
+async function verifyOTP(){
+  const code=['otp1','otp2','otp3','otp4','otp5','otp6'].map(id=>document.getElementById(id).value).join('');
+  if(code.length!==6){ toast('Code 6 chiffres',false); return; }
+  const { data, error } = await supabase.auth.verifyOtp({ email:pendingEmail, token:code, type:'signup' });
+  if(error){ toast('Code invalide: '+error.message,false); return; }
+  toast('✅ F4F Confirmé !'); setTimeout(()=> showScreen('login'),1000);
+}
+async function resendOTP(){
+  if(!pendingEmail) return;
+  const { error } = await supabase.auth.resend({ type:'signup', email:pendingEmail });
+  if(error) toast(error.message,false); else toast('Code renvoyé');
+}
+async function handleLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pwd=document.getElementById('login-pwd').value.trim();
+  if(!email||!pwd){ toast('Email + mdp',false); return; }
+  const btn=document.getElementById('btn-login'); btn.disabled=true; btn.textContent='⏳ Vérif F4F...';
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password:pwd });
+  if(error){ toast(error.message,false); btn.disabled=false; btn.innerHTML='🛡️ SE CONNECTER'; return; }
+  toast('✅ Connecté - F4F validé'); btn.disabled=false; btn.innerHTML='🛡️ SE CONNECTER';
+}
+document.querySelectorAll('.otp-box input').forEach((inp,i,arr)=>{ inp.addEventListener('input',()=>{ if(inp.value && arr[i+1]) arr[i+1].focus(); }); });
+</script>
+</body>
+</html>
